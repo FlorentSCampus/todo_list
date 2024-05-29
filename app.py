@@ -18,7 +18,7 @@ def todo_list():
     c.execute("SELECT id, task FROM todo")
     res = c.fetchall()
     c.close()
-    output = template("todo_list/make_table", rows = res)
+    output = template("todo_list/templates/make_table", rows = res)
     return output
 
 @route("/new", method = "GET")
@@ -33,7 +33,7 @@ def new_item():
         c.close()
         return "<p>The new task was inserted into the database, the ID is %s</p>" % new_id
     else:
-        return template("todo_list/new_task")
+        return template("todo_list/templates/new_task")
 
 @route("/edit/<no:int>", method = "GET")
 def edit_item(no):
@@ -58,7 +58,7 @@ def edit_item(no):
         c.execute("SELECT task FROM todo WHERE id = ?", (str(no),))
         cur_data = c.fetchone()
 
-        return template("todo_list/edit_task", old = cur_data, no = no)
+        return template("todo_list/templates/edit_task", old = cur_data, no = no)
     
 @route("/item<item:re:[0-9]+>")
 def show_item(item):
@@ -74,7 +74,7 @@ def show_item(item):
 
 @route("/help")
 def help():
-    return static_file("help.html", root = "todo_list")
+    return static_file("help.tpl", root = "todo_list/templates")
 
 @route("/json<json:re:[0-9]+>")
 def show_json(json):
